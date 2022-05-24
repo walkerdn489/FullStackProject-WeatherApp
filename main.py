@@ -1,4 +1,5 @@
 
+from app import app
 import sqlite3
 con = sqlite3.connect('DatabaseName.db')
 cur = con.cursor()
@@ -13,13 +14,13 @@ def addUser(email, username):
 
 def main():
 
-    email = input("Email: ")
+    """ email = input("Email: ")
     username = input("Username: ")
 
     addUser(email,username)
 
     for row in cur.execute('SELECT email, username FROM testTable'):
-        print(row)
+        print(row) """
 
 
 if __name__ == "__main__":

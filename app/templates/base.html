@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Solar Panels are Fun</title>
+      {% else %}
+      <title>Welcome to Solar Panels are Fun</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>DEX Industries: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
