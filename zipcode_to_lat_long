@@ -1,0 +1,17 @@
+import pandas
+import sqlite3
+
+# Connect to Database
+con = sqlite3.connect("solar_panels_db.db")
+cur = con.cursor()
+
+# ask user for zipcode
+zipcode = input("Enter your zipcode: ")
+
+# format string to include zipcode in where clause
+sql_string = "select * from raw_zipcode_data where zip = {}".format(zipcode)
+
+# query database
+results = cur.execute(sql_string).fetchall()
+
+print(results)
