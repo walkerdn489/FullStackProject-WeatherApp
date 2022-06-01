@@ -1,0 +1,18 @@
+import pandas
+import sqlite3
+
+# Connect to Database
+con = sqlite3.connect("solar_panels_db.db")
+cur = con.cursor()
+
+# read in data from csv
+df = pandas.read_csv('uszips.csv')
+
+# truncate table
+cur.execute('''DELETE FROM raw_zipcode_data;''')
+
+# push csv to data warehouse
+df.to_sql('raw_zipcode_data', con, if_exists='append', index = False)
+
+#return raw data table
+cur.execute('''SELECT * FROM raw_zipcode_data''').fetchall()
