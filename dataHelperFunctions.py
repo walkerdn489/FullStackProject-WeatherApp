@@ -18,7 +18,7 @@ cur = con.cursor()
 class databaseHelpers:
 
     # add element to the database
-    def add(entry):
+    def add(self, entry):
 
          # Insert a row of data
         cur.execute("INSERT INTO raw_weather_json VALUES (?,?,?,?,?,?,?,? \
@@ -32,19 +32,24 @@ class databaseHelpers:
         con.commit()
     
     # remove element from the database
-    def delete(entry):
+    def delete(self, entry):
 
         # delete a row of data
-        cur.execute("DELETE FROM raw_weather_json WHERE lat=? and lon=? and dt=?", entry.latatiude_, entry.longitude_,
-        entry.data_.dateTime_)
+        cur.execute("DELETE FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (entry.latatiude_, entry.longitude_,
+        entry.data_.dateTime_))
 
         # Save (commit) the changes
         con.commit()
     
     # update an emelent in the database
-    def update(entry):
+    def update(self, entry):
         pass
 
     # get a table from database to read
-    def read(entry):
-        pass
+    def read(self):
+        
+        # get the table
+        cur.execute("SELECT * FROM raw_weather_json")
+
+        # Save (commit) the changes
+        con.commit()
