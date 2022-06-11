@@ -9,27 +9,47 @@
 
 
 from ast import Delete
+from databaseEntry import databaseEntry
+import sqlite3
 
+con = sqlite3.connect('SolarDatabase.db')
+cur = con.cursor()
 
 class databaseHelpers:
 
-    # Default constructor
-    def __init__():
-        pass
+    # add element to the database
+    def add(self, entry):
 
-    # add element to the database 
-    def add():
-        pass
+         # Insert a row of data
+        cur.execute("INSERT INTO raw_weather_json VALUES (?,?,?,?,?,?,?,? \
+        ,?,?,?,?,?,?,?,?,?,?,?,?,?)", (entry.latatiude_, entry.longitude_, entry.timeZone_, entry.timeZoneOffset_,
+            entry.data_.dateTime_, entry.data_.sunrise_, entry.data_.sunset_, entry.data_.temp_, entry.data_.feelsLike_,
+            entry.data_.pressure_, entry.data_.humidity_, entry.data_.dewPoint_, entry.data_.uvi_, entry.data_.clouds_,
+            entry.data_.visibility_, entry.data_.windSpeed_, entry.data_.windDeg_, entry.weather_.id_, entry.weather_.main_,
+            entry.weather_.description_, entry.weather_.icon_))
+
+        # Save (commit) the changes
+        con.commit()
     
     # remove element from the database
-    def delete():
-        pass
+    def delete(self, entry):
 
+        # delete a row of data
+        cur.execute("DELETE FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (entry.latatiude_, entry.longitude_,
+        entry.data_.dateTime_))
+
+        # Save (commit) the changes
+        con.commit()
+    
     # update an emelent in the database
-    def update():
+    def update(self, entry):
         pass
 
     # get a table from database to read
-    def read():
-        pass
+    def read(self):
+        
+        # get the table
+        cur.execute("SELECT * FROM raw_weather_json")
 
+        # Save (commit) the changes
+        con.commit()
