@@ -55,4 +55,8 @@ class databaseHelpers:
         con.commit()
 
     def getLatLongFromZip(self, zipcode):
-        return (cur.execute("SELECT * FROM raw_us_zips WHERE zip=?", (zipcode,)))
+        cur.execute("SELECT Lat,Lng FROM raw_us_zips WHERE zip=?", (zipcode,))
+        longLat = []
+        for row in cur:
+            longLat = list(row)
+        return longLat

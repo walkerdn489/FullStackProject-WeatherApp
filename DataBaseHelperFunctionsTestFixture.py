@@ -68,8 +68,8 @@ class TestGetLonLatFromZip(unittest.TestCase):
     def test_getLonLat(self):
         zipCode = 29910
         result = self.helper.getLatLongFromZip(zipCode)
-        listResults = list(result)
-        print(listResults)
+        self.assertEqual(result[0], 32.2204, "Latitude should be 32.2204")
+        self.assertEqual(result[1], -80.88277, "Longitude should be -80.88277")
 
 if __name__ == '__main__':
     unittest.main()
