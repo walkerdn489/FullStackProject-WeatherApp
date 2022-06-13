@@ -7,7 +7,7 @@ import sqlite3
 con = sqlite3.connect('SolarDatabase.db')
 cur = con.cursor()
 
-class TestAddToDataBase(unittest.TestCase):
+class TestAddAndDeleteToDataBase(unittest.TestCase):
     helper = databaseHelpers()
     entry = databaseEntry()
     entry.longitude_ = 1
@@ -62,7 +62,14 @@ class TestAddToDataBase(unittest.TestCase):
             
         self.assertEqual(len(values), 0, "should not find entry since it is deleted")
     
+class TestGetLonLatFromZip(unittest.TestCase):
+    helper = databaseHelpers()
 
-            
+    def test_getLonLat(self):
+        zipCode = 29910
+        result = self.helper.getLatLongFromZip(zipCode)
+        listResults = list(result)
+        print(listResults)
+
 if __name__ == '__main__':
     unittest.main()
