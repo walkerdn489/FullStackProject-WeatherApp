@@ -11,7 +11,7 @@ class TestAddToDataBase(unittest.TestCase):
     helper = databaseHelpers()
     entry = databaseEntry()
     entry.longitude_ = 1
-    entry.latatiude_ = 1
+    entry.latitude_ = 1
     entry.timeZone_ = "EST"
     entry.data_.dateTime_ = 1
     entry.data_.temp_ = 290
@@ -29,7 +29,7 @@ class TestAddToDataBase(unittest.TestCase):
             values = list(row)
 
         self.assertEqual(values[0], 1, "longitude should be 1")
-        self.assertEqual(values[1], 1, "latatiude should be 1")
+        self.assertEqual(values[1], 1, "latitude should be 1")
         self.assertEqual(values[2], "EST", "TimeZone should be EST")
         self.assertEqual(values[3], 0, "timeZoneOffset is empty")
         self.assertEqual(values[4], 1, "dataTime is 1")

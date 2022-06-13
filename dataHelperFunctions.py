@@ -22,7 +22,7 @@ class databaseHelpers:
 
          # Insert a row of data
         cur.execute("INSERT INTO raw_weather_json VALUES (?,?,?,?,?,?,?,? \
-        ,?,?,?,?,?,?,?,?,?,?,?,?,?)", (entry.latatiude_, entry.longitude_, entry.timeZone_, entry.timeZoneOffset_,
+        ,?,?,?,?,?,?,?,?,?,?,?,?,?)", (entry.latitude_, entry.longitude_, entry.timeZone_, entry.timeZoneOffset_,
             entry.data_.dateTime_, entry.data_.sunrise_, entry.data_.sunset_, entry.data_.temp_, entry.data_.feelsLike_,
             entry.data_.pressure_, entry.data_.humidity_, entry.data_.dewPoint_, entry.data_.uvi_, entry.data_.clouds_,
             entry.data_.visibility_, entry.data_.windSpeed_, entry.data_.windDeg_, entry.weather_.id_, entry.weather_.main_,
@@ -35,7 +35,7 @@ class databaseHelpers:
     def delete(self, entry):
 
         # delete a row of data
-        cur.execute("DELETE FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (entry.latatiude_, entry.longitude_,
+        cur.execute("DELETE FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (entry.latitude_, entry.longitude_,
         entry.data_.dateTime_))
 
         # Save (commit) the changes
