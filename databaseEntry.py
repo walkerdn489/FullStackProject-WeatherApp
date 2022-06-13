@@ -33,7 +33,7 @@ class databaseEntry:
 
      # Default constructor
     def __init__(self):
-        self.latatiude_ = 0
+        self.latitude_ = 0
         self.longitude_ = 0
         self.timeZone_ = ""
         self.timeZoneOffset_ = 0
