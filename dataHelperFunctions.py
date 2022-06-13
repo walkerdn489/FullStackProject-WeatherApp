@@ -53,3 +53,6 @@ class databaseHelpers:
 
         # Save (commit) the changes
         con.commit()
+
+    def getLatLongFromZip(self, zipcode):
+        return (cur.execute("SELECT * FROM raw_us_zips WHERE zip=?", (zipcode,)))
