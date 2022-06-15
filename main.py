@@ -4,7 +4,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-con = sqlite3.connect('DatabaseName.db')
+con = sqlite3.connect('SolarDatbase.db')
 cur = con.cursor()
 
 @app.route('/')
