@@ -9,8 +9,7 @@
 
 
 from ast import Delete
-from re import A
-from databaseEntry import databaseEntry, weather
+from databaseEntry import databaseEntry
 import sqlite3
 import requests
 
