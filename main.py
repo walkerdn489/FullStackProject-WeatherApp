@@ -33,7 +33,6 @@ def main():
     result = helper.getLatLongFromZip(zipCode)
     LongLat = list(result)
     results = helper.getEntryFromLonLat(LongLat, time)
-    print(results.latitude_)
 
 if __name__ == "__main__":
     main()
