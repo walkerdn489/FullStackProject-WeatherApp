@@ -1,14 +1,17 @@
+######################################
+# Main function for project 
+# Last Updated: 06/14/2022
+#
+#
+#
+######################################
 
-import sqlite3
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 
 #from flask import Flask
 
 #app = Flask(__name__)
-
-con = sqlite3.connect('SolarDatabase.db')
-cur = con.cursor()
 
 #def addUser(email, username):
 
@@ -24,10 +27,13 @@ cur = con.cursor()
 
 def main():
     helper = databaseHelpers()
-    zipCode = input("Enter a zip Code")
+    zipCode = input("Enter a zip Code: ").strip()
+    # TODO ask for time value 
+    time = 0
     result = helper.getLatLongFromZip(zipCode)
-    listResults = list(result)
-    
+    LongLat = list(result)
+    results = helper.getEntryFromLonLat(LongLat, time)
+    print(results.latitude_)
 
 if __name__ == "__main__":
     main()
