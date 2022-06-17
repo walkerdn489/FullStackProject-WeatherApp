@@ -1,11 +1,20 @@
 
 import sqlite3
-#from flask import Flask
+from flask import Flask, render_template      
 
-#app = Flask(__name__)
+app = Flask(__name__)
 
-con = sqlite3.connect('DatabaseName.db')
+con = sqlite3.connect('SolarDatbase.db')
 cur = con.cursor()
+
+@app.route('/')
+def home():
+   return render_template("home.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
 
 #def addUser(email, username):
 
@@ -15,12 +24,8 @@ cur = con.cursor()
     # Save (commit) the changes
 #    con.commit()
 
-#@app.route('/')
-#def hello():
-#    return '<h1>Hello, World!</h1>'
-
-def main():
-    pass
+#def main():
+#    pass
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
