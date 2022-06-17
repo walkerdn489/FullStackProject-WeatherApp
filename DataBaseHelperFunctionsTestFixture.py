@@ -1,3 +1,11 @@
+######################################
+# Unit test for dataHelperFunctions
+# Last Updated: 06/14/2022
+#
+#
+#
+######################################i
+
 import unittest
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
@@ -7,7 +15,7 @@ import sqlite3
 con = sqlite3.connect('SolarDatabase.db')
 cur = con.cursor()
 
-class TestAddToDataBase(unittest.TestCase):
+class TestAddAndDeleteToDataBase(unittest.TestCase):
     helper = databaseHelpers()
     entry = databaseEntry()
     entry.longitude_ = 1
@@ -62,7 +70,14 @@ class TestAddToDataBase(unittest.TestCase):
             
         self.assertEqual(len(values), 0, "should not find entry since it is deleted")
     
+class TestGetLonLatFromZip(unittest.TestCase):
+    helper = databaseHelpers()
 
-            
+    def test_getLonLat(self):
+        zipCode = 29910
+        result = self.helper.getLatLongFromZip(zipCode)
+        self.assertEqual(result[0], 32.2204, "Latitude should be 32.2204")
+        self.assertEqual(result[1], -80.88277, "Longitude should be -80.88277")
+
 if __name__ == '__main__':
     unittest.main()

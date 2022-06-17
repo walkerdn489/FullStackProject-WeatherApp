@@ -1,6 +1,6 @@
 ######################################
 # Structure for the database Entry
-# Last Updated: 06/06/2022
+# Last Updated: 06/13/2022
 #
 #
 #

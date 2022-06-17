@@ -1,8 +1,20 @@
+######################################
+# Main function for project 
+# Last Updated: 06/14/2022
+#
+#
+#
+######################################
+
+from databaseEntry import databaseEntry
+from dataHelperFunctions import databaseHelpers
+
 
 import sqlite3
 from flask import Flask, render_template      
 
 app = Flask(__name__)
+
 
 con = sqlite3.connect('SolarDatbase.db')
 cur = con.cursor()
@@ -15,7 +27,6 @@ def home():
 def about():
     return render_template("about.html")
 
-
 #def addUser(email, username):
 
     # Insert a row of data
@@ -24,8 +35,15 @@ def about():
     # Save (commit) the changes
 #    con.commit()
 
-#def main():
-#    pass
+def main():
+    helper = databaseHelpers()
+    zipCode = input("Enter a zip Code: ").strip()
+    # TODO ask for time value 
+    time = 0
+    result = helper.getLatLongFromZip(zipCode)
+    LongLat = list(result)
+    results = helper.getEntryFromLonLat(LongLat, time)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
