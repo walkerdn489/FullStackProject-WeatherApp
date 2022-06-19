@@ -1,6 +1,6 @@
 ######################################
 # Main function for project 
-# Last Updated: 06/14/2022
+# Last Updated: 06/18/2022
 #
 #
 #
@@ -38,8 +38,8 @@ def about():
 def main():
     helper = databaseHelpers()
     zipCode = input("Enter a zip Code: ").strip()
-    # TODO ask for time value 
-    time = 0
+    time = input("Enter a date (MM/DD/YYYY): ").strip()
+    helper.convertDateToTime(time)
     result = helper.getLatLongFromZip(zipCode)
     LongLat = list(result)
     results = helper.getEntryFromLonLat(LongLat, time)
