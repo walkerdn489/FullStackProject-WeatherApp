@@ -112,9 +112,6 @@ class databaseHelpers:
 
     def getEntryFromLonLat(self, LongLat, time):
         
-        # Default to June 13, 12PM for now #TODO make time converter
-        time = 1655136000
-
         # get entry for long and lat
         cur.execute("SELECT * FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (LongLat[0],LongLat[1], time))
         
