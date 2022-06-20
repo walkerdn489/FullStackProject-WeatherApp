@@ -1,12 +1,14 @@
 ######################################
 # Unit test for dataHelperFunctions
-# Last Updated: 06/14/2022
+# Last Updated: 06/18/2022
 #
 #
 #
 ######################################i
 
+from pydoc import Helper
 import unittest
+import datetime
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 
@@ -36,8 +38,8 @@ class TestAddAndDeleteToDataBase(unittest.TestCase):
         for row in cur:
             values = list(row)
 
-        self.assertEqual(values[0], 1, "longitude should be 1")
-        self.assertEqual(values[1], 1, "latitude should be 1")
+        self.assertEqual(values[0], 1, "latitude_ should be 1")
+        self.assertEqual(values[1], 1, "longitude should be 1")
         self.assertEqual(values[2], "EST", "TimeZone should be EST")
         self.assertEqual(values[3], 0, "timeZoneOffset is empty")
         self.assertEqual(values[4], 1, "dataTime is 1")
@@ -78,6 +80,53 @@ class TestGetLonLatFromZip(unittest.TestCase):
         result = self.helper.getLatLongFromZip(zipCode)
         self.assertEqual(result[0], 32.2204, "Latitude should be 32.2204")
         self.assertEqual(result[1], -80.88277, "Longitude should be -80.88277")
+
+class TestDateTimeConversions(unittest.TestCase):
+    helper = databaseHelpers()
+
+    def test_TimeConversions(self):
+        date = "05/18/1998"
+        time = self.helper.convertDateToTime(date)
+        self.assertEqual(time, 895464000.0, "Time should be 895464000.0 seconds")
+
+        # May 18th 1998
+        date = self.helper.convertTimeToDate(time)
+        date = date.strftime('%m/%d/%Y')
+        month = date[0] + date[1]
+        day = date[3] + date[4]
+        year = date[6] + date[7] + date[8] + date[9]
+        self.assertEqual(month, "05", "Month should be May") 
+        self.assertEqual(day, "18", "Day should be 18th")
+        self.assertEqual(year, "1998", "Year should be 1998")
+
+
+class TestUpdateToDataBase(unittest.TestCase):
+    helper = databaseHelpers()
+    entry = databaseEntry()
+    entry.longitude_ = 1
+    entry.latitude_ = 1
+    entry.timeZone_ = "EST"
+    entry.data_.dateTime_ = 1
+    entry.data_.temp_ = 290
+    entry.weather_.description_ = "cloudy"
+    entry.weather_.id_ = 1
+
+    def test_updateToDataBase(self):
+
+        self.helper.add(self.entry)
+
+        self.entry.longitude_ = 2
+        self.helper.update(self.entry)
+
+        # get the element
+        cur.execute("SELECT * FROM raw_weather_json WHERE dt=?", (self.entry.data_.dateTime_,))
+
+        values = []
+        for row in cur:
+            values = list(row)
+        self.assertEqual(values[1], 2, "longitude should now be 2")
+
+        self.helper.delete(self.entry)        
 
 if __name__ == '__main__':
     unittest.main()
