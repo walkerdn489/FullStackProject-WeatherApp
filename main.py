@@ -11,17 +11,28 @@ from dataHelperFunctions import databaseHelpers
 
 
 import sqlite3
-from flask import Flask, render_template      
+from flask import Flask, request, render_template      
 
 app = Flask(__name__)
 
 
-con = sqlite3.connect('SolarDatbase.db')
+con = sqlite3.connect('SolarDatabase.db')
 cur = con.cursor()
 
 @app.route('/')
 def home():
    return render_template("home.html")
+
+@app.route('/', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        zipcode = request.form['zipcode']
+        electricity_bill = request.form['electricity_bill']
+
+        print(zipcode)
+        print(electricity_bill)
+
+    return render_template('home.html')
 
 @app.route('/about')
 def about():
