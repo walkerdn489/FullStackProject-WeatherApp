@@ -6,57 +6,6 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>My Example</title>
 
-<!-- CSS -->
-<style>
-.myForm {
-font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-font-size: 0.8em;
-width: 30em;
-padding: 1em;
-}
-
-.myForm * {
-box-sizing: border-box;
-}
-
-.myForm label {
-padding: 0;
-font-weight: bold;
-text-align: right;
-display: block;
-}
-
-.myForm input,
-.myForm select,
-.myForm textarea {
-margin-left: 2em;
-float: right;
-width: 20em;
-border: 1px solid #ccc;
-font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-font-size: 0.9em;
-padding: 0.3em;
-}
-
-.myForm textarea {
-height: 100px;
-}
-
-.myForm button {
-padding: 1em;
-border-radius: 0.5em;
-background: #eee;
-border: none;
-font-weight: bold;
-margin-left: 14em;
-margin-top: 1.8em;
-}
-
-.myForm button:hover {
-background: #ccc;
-cursor: pointer;
-}
-</style>
 
 </head>
 <body>
@@ -65,39 +14,13 @@ cursor: pointer;
     
   <h1> Are Solar Panels a Good Choice for Me? </h1>
 
-<form class="myForm" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm">
-
-<p>
-<label>Zipcode 
-<input type="number" name="customer_zipcode" required>
-</label> 
-</p>
-
-<p>
-<label>Electricity Bill 
-<input type="number" name="monthly_electricity_bill">
-</label>
-</p>
-	
-<p>
-<label> Some Dropdown
-<select id="pickup_place" name="pickup_place">
-<option value="" selected="selected">Select One</option>
-<option value="option1" >Option 1</option>
-<option value="option2" >Option 2</option>
-</select>
-</label> 
-</p>
-
-<p>
-<label>Comments 
-<textarea name="comments" maxlength="500"></textarea>
-</label>
-</p>
-
-<p><button>Submit</button></p>
-
-</form>
+  <form method="post">
+    <label for="zipcode">Zipcode</label>
+    <input name="zipcode" id="zipcode" required>
+    <label for="electricity_bill">Electricity Bill</label>
+    <input name="electricity_bill" id="electricity_bill">
+    <input type="submit" value="Submit">
+  </form>
 
   {% endblock %}
 </body>
