@@ -15,10 +15,6 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-
-con = sqlite3.connect('SolarDatabase.db')
-cur = con.cursor()
-
 @app.route('/')
 def home():
    return render_template("home.html")
@@ -28,32 +24,22 @@ def login():
     if request.method == 'POST':
         zipcode = request.form['zipcode']
         electricity_bill = request.form['electricity_bill']
+        time = request.form['date']
 
-        print(zipcode)
-        print(electricity_bill)
+    helper = databaseHelpers()
+    zipCode = str(zipcode).strip()
+    time = str(time).strip()
+    time = helper.convertDateToTime(time)
+    result = helper.getLatLongFromZip(zipCode)
+    LongLat = list(result)
+    results = helper.getEntryFromLonLat(LongLat, time)
 
-    return render_template('home.html')
+    return render_template('results.html', variable=results)
 
 @app.route('/about')
 def about():
     return render_template("about.html")
 
-#def addUser(email, username):
-
-    # Insert a row of data
-#    cur.execute("INSERT INTO testTable VALUES (?, ?)", (email, username))
-
-    # Save (commit) the changes
-#    con.commit()
-
-def main():
-    helper = databaseHelpers()
-    zipCode = input("Enter a zip Code: ").strip()
-    time = input("Enter a date (MM/DD/YYYY): ").strip()
-    helper.convertDateToTime(time)
-    result = helper.getLatLongFromZip(zipCode)
-    LongLat = list(result)
-    results = helper.getEntryFromLonLat(LongLat, time)
 
 
 if __name__ == "__main__":
