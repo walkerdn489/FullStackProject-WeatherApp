@@ -9,7 +9,9 @@
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 
-from flask import Flask, request, render_template      
+from flask import Flask, request, render_template  
+
+helper = databaseHelpers()
 
 app = Flask(__name__)
 
@@ -24,7 +26,6 @@ def login():
         electricity_bill = request.form['electricity_bill']
         time = request.form['date']
 
-    helper = databaseHelpers()
     zipCode = str(zipcode).strip()
     time = str(time).strip()
     time = helper.convertDateToTime(time)
@@ -38,5 +39,9 @@ def login():
 def about():
     return render_template("about.html")
 
+def main():
+    helper.closeDataBase()
+
 if __name__ == "__main__":
     app.run(debug=True)
+    main()
