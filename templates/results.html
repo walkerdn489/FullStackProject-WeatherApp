@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Weather Forcast</title>
+
+</head>
+<body>
+  {% extends "template.html" %}
+  {% block content %}
+    
+  <h1> Weather Forcast: </h1>
+  <p>The temperature: {{ variable.data_.temp_ }}F</p>
+  <p>Feels Like: {{ variable.data_.feelsLike_ }}F</p>
+  <p>Humidity: {{ variable.data_.humidity_ }}%</p>
+  <p>With a Wind Speed of: {{ variable.data_.windSpeed_ }} miles/hour</p>
+
+  {% endblock %}
+</body>
+</html>

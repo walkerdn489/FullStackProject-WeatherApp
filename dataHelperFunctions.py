@@ -9,12 +9,13 @@
 
 
 from ast import Delete
+from optparse import Values
 from databaseEntry import databaseEntry
 import sqlite3
 import requests
 import datetime
 
-con = sqlite3.connect('SolarDatabase.db')
+con = sqlite3.connect('SolarDatabase.db', check_same_thread=False)
 cur = con.cursor()
 
 class databaseHelpers:
@@ -25,7 +26,9 @@ class databaseHelpers:
         day = int(date[3] + date[4])
         year = int(date[6] + date[7] + date[8] + date[9])
         dt = datetime.datetime(year, month, day)
-        time = dt.timestamp()
+        
+        # need to be an int to cut off any decimal places 
+        time = int(dt.timestamp())
         return time
 
     def convertTimeToDate(self, time):
@@ -33,9 +36,9 @@ class databaseHelpers:
         date = datetime.datetime.fromtimestamp(ts)
         return date
 
-    def callApi(self, Long, Lat, time):
-        apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&dt={dt}&appid={API_key}".format(
-                    lat = Lat, long = Long, dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
+    def callApi(self, Lat, Long, time):
+        apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
+                    lat = Lat, long = Long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
         if response.status_code == 200:
             #print("sucessfully fetched the data with parameters provided")
@@ -53,7 +56,7 @@ class databaseHelpers:
 
          # Insert a row of data
         cur.execute("INSERT INTO raw_weather_json VALUES (?,?,?,?,?,?,?,? \
-        ,?,?,?,?,?,?,?,?,?,?,?,?,?)", (entry.latitude_, entry.longitude_, entry.timeZone_, entry.timeZoneOffset_,
+        ,?,?,?,?,?,?,?,?,?,?,?,?,?)", (round(entry.latitude_,4), round(entry.longitude_,4), entry.timeZone_, entry.timeZoneOffset_,
             entry.data_.dateTime_, entry.data_.sunrise_, entry.data_.sunset_, entry.data_.temp_, entry.data_.feelsLike_,
             entry.data_.pressure_, entry.data_.humidity_, entry.data_.dewPoint_, entry.data_.uvi_, entry.data_.clouds_,
             entry.data_.visibility_, entry.data_.windSpeed_, entry.data_.windDeg_, entry.weather_.id_, entry.weather_.main_,
@@ -85,6 +88,7 @@ class databaseHelpers:
 
          # Save (commit) the changes
         con.commit()
+
     # get a table from database to read
     def read(self):
         
@@ -110,18 +114,21 @@ class databaseHelpers:
         return longLat
 
 
-    def getEntryFromLonLat(self, LongLat, time):
+    def getEntryFromLonLat(self, LatLong, time):
         
-        # get entry for long and lat
-        cur.execute("SELECT * FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (LongLat[0],LongLat[1], time))
-        
+        # get entry for long and lat. Rounding to the 4th decimal place to match what was put in DataBase
+        cur.execute("SELECT COUNT(*) FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (round(LatLong[0],4), 
+        round(LatLong[1],4), time))
+        (number_of_rows,)=cur.fetchone()
+
         entry = databaseEntry()
 
         # not already in DB
-        if (cur.rowcount == 0):
+        if (number_of_rows == 0):
 
             # Make Api Call
-            apiResutls = self.callApi(LongLat[0], LongLat[1], time)
+            apiResutls = self.callApi(LatLong[0], LatLong[1], time)
+
             data = apiResutls["data"]
             weather = (data[0]["weather"])
 
@@ -153,10 +160,16 @@ class databaseHelpers:
             self.add(entry)
 
         else:
-            # turn into list of list
+            # pull out DB entry
+            cur.execute("SELECT * FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (round(LatLong[0],4), 
+            round(LatLong[1],4), time))
+
             values = []
             for row in cur:
+                # this makes it a list of a list. 
                 values.append(list(row))
+            # so we turn it back into a normal list
+            values = values[0]
 
             # Fill out Databse Entry
             entry.latitude_ = values[0]
