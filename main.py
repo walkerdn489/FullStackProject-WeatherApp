@@ -1,26 +1,46 @@
+######################################
+# Main function for project 
+# Last Updated: 06/18/2022
+#
+#
+#
+######################################
+
+from databaseEntry import databaseEntry
+from dataHelperFunctions import databaseHelpers
+
 
 import sqlite3
-#from flask import Flask
+from flask import Flask, request, render_template      
 
-#app = Flask(__name__)
+app = Flask(__name__)
 
-con = sqlite3.connect('DatabaseName.db')
-cur = con.cursor()
+@app.route('/')
+def home():
+   return render_template("home.html")
 
-#def addUser(email, username):
+@app.route('/', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        zipcode = request.form['zipcode']
+        electricity_bill = request.form['electricity_bill']
+        time = request.form['date']
 
-    # Insert a row of data
-#    cur.execute("INSERT INTO testTable VALUES (?, ?)", (email, username))
+    helper = databaseHelpers()
+    zipCode = str(zipcode).strip()
+    time = str(time).strip()
+    time = helper.convertDateToTime(time)
+    result = helper.getLatLongFromZip(zipCode)
+    LongLat = list(result)
+    results = helper.getEntryFromLonLat(LongLat, time)
 
-    # Save (commit) the changes
-#    con.commit()
+    return render_template('results.html', variable=results)
 
-#@app.route('/')
-#def hello():
-#    return '<h1>Hello, World!</h1>'
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
-def main():
-    pass
+
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
