@@ -1,7 +1,7 @@
 ######################################
 # Helper methods for the data-base 
 # used for the project 
-# Last Updated: 06/18/2022
+# Last Updated: 06/27/2022
 #
 #
 #
@@ -39,7 +39,7 @@ class databaseHelpers:
                     lat = Lat, long = Long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
         if response.status_code == 200:
-            #print("sucessfully fetched the data with parameters provided")
+            # sucessfully fetched the data with parameters provided"
             return(response.json())
         else:
             print(f"There was a {response.status_code} error with the request")
@@ -165,7 +165,7 @@ class databaseHelpers:
             values = []
             for row in cur:
                 values = list(row)
-                
+
             # Fill out Databse Entry
             entry.latitude_ = values[0]
             entry.longitude_ = values[1]

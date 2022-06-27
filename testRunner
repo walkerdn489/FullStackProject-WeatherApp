@@ -1,5 +1,10 @@
 #!/bin/bash
 
+###########################
+# Last updated on 06/26/2022
+#
+###########################
+
 # Take input with defining variable
 read -p "Which test would you like to run?
 1. Run Code Coverage
