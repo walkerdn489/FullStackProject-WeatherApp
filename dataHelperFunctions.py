@@ -34,7 +34,8 @@ class databaseHelpers:
         date = datetime.datetime.fromtimestamp(ts)
         return date
 
-    def callApi(self, Lat, Long, time):
+    # THis is a Private method (__FUNCTION_NAME)
+    def __callApi(self, Lat, Long, time):
         apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
                     lat = Lat, long = Long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
@@ -125,7 +126,7 @@ class databaseHelpers:
         if (number_of_rows == 0):
 
             # Make Api Call
-            apiResutls = self.callApi(LatLong[0], LatLong[1], time)
+            apiResutls = self.__callApi(LatLong[0], LatLong[1], time)
 
             data = apiResutls["data"]
             weather = (data[0]["weather"])
