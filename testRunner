@@ -2,28 +2,43 @@
 
 # Take input with defining variable
 read -p "Which test would you like to run?
-1. TestAddAndDeleteToDataBase 
-2. TestGetLonLatFromZip  
-3. TestDateTimeConversions
-4. TestUpdateToDataBase
-5. All
+1. Run Code Coverage
+2. Run All Test
+3. TestAddAndDeleteToDataBase 
+4. TestGetLonLatFromZip  
+5. TestDateTimeConversions
+6. TestUpdateToDataBase
+7. TestGetDBEntryFromLatLong
 enter number:" answer
 
 if [ $answer == "1" ];
 then
-    python3 DataBaseHelperFunctionsTestFixture.py TestAddAndDeleteToDataBase
+    coverage run DataBaseHelperFunctionsTestFixture.py
+    
 elif [ $answer == "2" ];
 then
-    python3 DataBaseHelperFunctionsTestFixture.py TestGetLonLatFromZip
+    python3 DataBaseHelperFunctionsTestFixture.py
+
 elif [ $answer == "3" ];
 then
-    python3 DataBaseHelperFunctionsTestFixture.py TestDateTimeConversions
+    python3 DataBaseHelperFunctionsTestFixture.py TestAddAndDeleteToDataBase
+
 elif [ $answer == "4" ];
 then
-    python3 DataBaseHelperFunctionsTestFixture.py TestUpdateToDataBase
+    python3 DataBaseHelperFunctionsTestFixture.py TestGetLonLatFromZip
+
 elif [ $answer == "5" ];
 then 
-    python3 DataBaseHelperFunctionsTestFixture.py
+    python3 DataBaseHelperFunctionsTestFixture.py TestDateTimeConversions
+
+elif [ $answer == "6" ];
+then 
+    python3 DataBaseHelperFunctionsTestFixture.py TestUpdateToDataBase
+
+elif [ $answer == "7" ];
+then 
+    python3 DataBaseHelperFunctionsTestFixture.py TestGetDBEntryFromLatLong
+
 else
     echo "Not a valid choice"
 fi

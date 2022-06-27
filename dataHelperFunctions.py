@@ -8,8 +8,6 @@
 ######################################
 
 
-from ast import Delete
-from optparse import Values
 from databaseEntry import databaseEntry
 import sqlite3
 import requests
@@ -98,7 +96,7 @@ class databaseHelpers:
         # turn into list of list
         values = []
         for row in cur:
-            values.append(list(row))
+            values = (list(row))
 
         return values 
 
@@ -166,11 +164,8 @@ class databaseHelpers:
 
             values = []
             for row in cur:
-                # this makes it a list of a list. 
-                values.append(list(row))
-            # so we turn it back into a normal list
-            values = values[0]
-
+                values = list(row)
+                
             # Fill out Databse Entry
             entry.latitude_ = values[0]
             entry.longitude_ = values[1]
