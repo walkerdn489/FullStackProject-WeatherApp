@@ -1,12 +1,11 @@
 ######################################
 # Unit test for dataHelperFunctions
-# Last Updated: 06/18/2022
+# Last Updated: 06/27/2022
 #
 #
 #
 ######################################i
 
-from pydoc import Helper
 import unittest
 import datetime
 from databaseEntry import databaseEntry
@@ -127,6 +126,28 @@ class TestUpdateToDataBase(unittest.TestCase):
         self.assertEqual(values[1], 2, "longitude should now be 2")
 
         self.helper.delete(self.entry)        
+
+class TestGetDBEntryFromLatLong(unittest.TestCase):
+    helper = databaseHelpers()
+    entry = databaseEntry()
+
+    def test_GetDBEntryFromLatLong(self):
+        date = "06/26/2022"
+        time = self.helper.convertDateToTime(date)
+        latLong = self.helper.getLatLongFromZip("01752")
+
+        # First time should add it to DB 
+        results = self.helper.getEntryFromLonLat(latLong, time)
+
+        # Second time should pull it out of DB 
+        secondResults = self.helper.getEntryFromLonLat(latLong, time)
+
+        self.assertEqual(results.latitude_, secondResults.latitude_, 42.3494)
+        self.assertEqual(results.longitude_, secondResults.longitude_, -71.5468)
+        self.assertEqual(results.timeZone_,secondResults.timeZone_,"America/New_York")
+        self.assertEqual(results.data_.dateTime_, secondResults.data_.dateTime_, 1656216000)
+        self.assertEqual(results.data_.temp_, secondResults.data_.temp_,66.2)
+
 
 if __name__ == '__main__':
     unittest.main()
