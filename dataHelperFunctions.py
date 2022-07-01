@@ -35,9 +35,26 @@ class databaseHelpers:
         return date
 
     # THis is a Private method (__FUNCTION_NAME)
-    def __callApi(self, Lat, Long, time):
+    def __callApi(self, lat, long, time):
         apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
-                    lat = Lat, long = Long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
+                    lat = lat, long = long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
+        response = requests.get(apiString)
+        if response.status_code == 200:
+            # sucessfully fetched the data with parameters provided"
+            return(response.json())
+        else:
+            print(f"There was a {response.status_code} error with the request")
+
+    # This comes out in UTC
+    def __callSunRiseSetApi(self, lat, long, date): 
+        # Change Date to YYYY-MM-DD
+        month = date[0] + date[1]
+        day = date[3] + date[4]
+        year = date[6] + date[7] + date[8] + date[9]
+        date = year + "-" + month + "-" + day
+        print(lat, long, date)
+        apiString = "https://api.sunrise-sunset.org/json?lat={lat}&lng={long}&date={date}".format(
+                    lat = lat, long = long, date = date)
         response = requests.get(apiString)
         if response.status_code == 200:
             # sucessfully fetched the data with parameters provided"
@@ -121,12 +138,16 @@ class databaseHelpers:
         (number_of_rows,)=cur.fetchone()
 
         entry = databaseEntry()
+        stringDate = time
+        time = self.convertDateToTime(time)
 
         # not already in DB
         if (number_of_rows == 0):
 
             # Make Api Call
             apiResutls = self.__callApi(LatLong[0], LatLong[1], time)
+            SunRiseSunSet = self.__callSunRiseSetApi(LatLong[0], LatLong[1], stringDate)
+            print(SunRiseSunSet)
 
             data = apiResutls["data"]
             weather = (data[0]["weather"])
@@ -137,9 +158,8 @@ class databaseHelpers:
             entry.timeZone_ = apiResutls["timezone"]
             entry.timeZoneOffset_ = apiResutls["timezone_offset"]
             entry.data_.dateTime_ = data[0]["dt"]
-            # TODO figure out why sunrise and sunset werent in call
-            #entry.data_.sunrise_ = data[0]["sunrise"]
-            #entry.data_.sunset_ = data[0]["sunset"]
+            entry.data_.sunrise_ = SunRiseSunSet["results"]["sunrise"]
+            entry.data_.sunset_ = SunRiseSunSet["results"]["sunset"]
             entry.data_.temp_ = data[0]["temp"]
             entry.data_.feelsLike_ = data[0]["feels_like"]
             entry.data_.pressure_ = data[0]["pressure"]
