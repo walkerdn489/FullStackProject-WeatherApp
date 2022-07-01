@@ -1,15 +1,13 @@
 ######################################
 # Helper methods for the data-base 
 # used for the project 
-# Last Updated: 06/18/2022
+# Last Updated: 06/27/2022
 #
 #
 #
 ######################################
 
 
-from ast import Delete
-from optparse import Values
 from databaseEntry import databaseEntry
 import sqlite3
 import requests
@@ -36,12 +34,13 @@ class databaseHelpers:
         date = datetime.datetime.fromtimestamp(ts)
         return date
 
-    def callApi(self, Lat, Long, time):
+    # THis is a Private method (__FUNCTION_NAME)
+    def __callApi(self, Lat, Long, time):
         apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
                     lat = Lat, long = Long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
         if response.status_code == 200:
-            #print("sucessfully fetched the data with parameters provided")
+            # sucessfully fetched the data with parameters provided"
             return(response.json())
         else:
             print(f"There was a {response.status_code} error with the request")
@@ -98,7 +97,7 @@ class databaseHelpers:
         # turn into list of list
         values = []
         for row in cur:
-            values.append(list(row))
+            values = (list(row))
 
         return values 
 
@@ -127,7 +126,7 @@ class databaseHelpers:
         if (number_of_rows == 0):
 
             # Make Api Call
-            apiResutls = self.callApi(LatLong[0], LatLong[1], time)
+            apiResutls = self.__callApi(LatLong[0], LatLong[1], time)
 
             data = apiResutls["data"]
             weather = (data[0]["weather"])
@@ -166,10 +165,7 @@ class databaseHelpers:
 
             values = []
             for row in cur:
-                # this makes it a list of a list. 
-                values.append(list(row))
-            # so we turn it back into a normal list
-            values = values[0]
+                values = list(row)
 
             # Fill out Databse Entry
             entry.latitude_ = values[0]
