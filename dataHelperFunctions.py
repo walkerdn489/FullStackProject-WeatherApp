@@ -18,6 +18,15 @@ cur = con.cursor()
 
 class databaseHelpers:
 
+    ############################
+    # Function: convertDateToTime
+    #
+    # Input: date - A given date to convert to unix time. MM/DD/YYYY
+    #
+    # Output: a unix time. 
+    #
+    # Notes:  
+    ############################
     def convertDateToTime(self, date):
         # MM/DD/YYYY
         month = int(date[0] + date[1]) 
@@ -29,23 +38,51 @@ class databaseHelpers:
         time = int(dt.timestamp())
         return time
 
+    ############################
+    # Function: convertTimeToDate
+    #
+    # Input: a unix time 
+    #
+    # Output: the date MM/DD?YYY that represents the given Unix time
+    #
+    # Notes:  
+    ############################
     def convertTimeToDate(self, time):
         ts = int(time)
         date = datetime.datetime.fromtimestamp(ts)
         return date
 
-    # THis is a Private method (__FUNCTION_NAME)
+    ############################
+    # Function: __callApi
+    #
+    # Input: lat: Latitude, long: Longitude, time: Unix time
+    #
+    # Output: response for the open weather map api
+    #
+    # Notes:  
+    # This is a Private method (__FUNCTION_NAME)
+    ############################
     def __callApi(self, lat, long, time):
         apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
                     lat = lat, long = long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
         if response.status_code == 200:
-            # sucessfully fetched the data with parameters provided"
+            # successfully fetched the data with parameters provided"
             return(response.json())
         else:
             print(f"There was a {response.status_code} error with the request")
 
+    #############################
+    # Function: __callSunRiseSetApi
+    #
+    # Input: lat: Latitude, long: Longitude, date: MM/DD/YYYY
+    #
+    # Output: Response from sunrise sunset api
+    #
+    # Notes:  
+    # This is a Private method (__FUNCTION_NAME)
     # This comes out in UTC
+    ############################
     def __callSunRiseSetApi(self, lat, long, date): 
         # Change Date to YYYY-MM-DD
         month = date[0] + date[1]
@@ -57,17 +94,36 @@ class databaseHelpers:
                     lat = lat, long = long, date = date)
         response = requests.get(apiString)
         if response.status_code == 200:
-            # sucessfully fetched the data with parameters provided"
+            # successfully fetched the data with parameters provided"
             return(response.json())
         else:
             print(f"There was a {response.status_code} error with the request")
 
+    
+    ############################
+    # Function: closeDataBase
+    #
+    # Input: 
+    #
+    # Output: 
+    #
+    # Notes: 
     # Kill connection to dataBase
+    ############################  
     def closeDataBase(self):
         cur.close()
         con.close()
 
+    ############################
+    # Function: add
+    #
+    # Input: entry to add to DB
+    #
+    # Output: 
+    #
+    # Notes: 
     # add element to the database
+    ############################  
     def add(self, entry):
 
          # Insert a row of data
@@ -81,7 +137,16 @@ class databaseHelpers:
         # Save (commit) the changes
         con.commit()
     
+    ############################
+    # Function: delete
+    #
+    # Input: entry to delete from DB
+    #
+    # Output: 
+    #
+    # Notes: 
     # remove element from the database
+    ############################ 
     def delete(self, entry):
 
         # delete a row of data
@@ -91,7 +156,16 @@ class databaseHelpers:
         # Save (commit) the changes
         con.commit()
     
-    # update an emelent in the database
+    ############################
+    # Function: update
+    #
+    # Input: entry to update in DB
+    #
+    # Output: 
+    #
+    # Notes: 
+    # update an element in the database
+    ############################ 
     def update(self, entry):
         cur.execute ("UPDATE raw_weather_json SET lat=?,lon=?,timezone=?,timezone_offset=?,dt=?,sunrise=?,\
             sunset=?,temp=?,feels_like=?,pressure=?,humidity=?,dew_point=?,uvi=?,clouds=?,visibility=?,wind_speed=?,\
@@ -105,7 +179,16 @@ class databaseHelpers:
          # Save (commit) the changes
         con.commit()
 
+    ############################
+    # Function: read
+    #
+    # Input: 
+    #
+    # Output: 
+    #
+    # Notes: 
     # get a table from database to read
+    ############################ 
     def read(self):
         
         # get the table
@@ -118,18 +201,35 @@ class databaseHelpers:
 
         return values 
 
+    ############################
+    # Function: getLatLongFromZip
+    #
+    # Input: zipcode: zipcode to get latitude and longitude from
+    #
+    # Output: latLong: list with [latitude, longitude]
+    #
+    # Notes: 
+    ############################ 
     def getLatLongFromZip(self, zipcode):
 
         # Get long and lat from zip code table
         cur.execute("SELECT Lat,Lng FROM raw_us_zips WHERE zip=?", (zipcode,))
 
         # populate and return results
-        longLat = []
+        latLong = []
         for row in cur:
-            longLat = list(row)
-        return longLat
+            latLong = list(row)
+        return latLong
 
-
+    ############################
+    # Function: getEntryFromLonLat
+    #
+    # Input: LatLong: list with [latitude, longitude], time: unix time 
+    #
+    # Output: Entry: entry from the database
+    #
+    # Notes: Will add the entry to the database if it is new
+    ############################ 
     def getEntryFromLonLat(self, LatLong, time):
         
         # get entry for long and lat. Rounding to the 4th decimal place to match what was put in DataBase
@@ -145,18 +245,18 @@ class databaseHelpers:
         if (number_of_rows == 0):
 
             # Make Api Call
-            apiResutls = self.__callApi(LatLong[0], LatLong[1], time)
+            apiResults = self.__callApi(LatLong[0], LatLong[1], time)
             SunRiseSunSet = self.__callSunRiseSetApi(LatLong[0], LatLong[1], stringDate)
             print(SunRiseSunSet)
 
-            data = apiResutls["data"]
+            data = apiResults["data"]
             weather = (data[0]["weather"])
 
-            # Fill out Databse Entry
-            entry.latitude_ = apiResutls["lat"]
-            entry.longitude_ = apiResutls["lon"]
-            entry.timeZone_ = apiResutls["timezone"]
-            entry.timeZoneOffset_ = apiResutls["timezone_offset"]
+            # Fill out Database Entry
+            entry.latitude_ = apiResults["lat"]
+            entry.longitude_ = apiResults["lon"]
+            entry.timeZone_ = apiResults["timezone"]
+            entry.timeZoneOffset_ = apiResults["timezone_offset"]
             entry.data_.dateTime_ = data[0]["dt"]
             entry.data_.sunrise_ = SunRiseSunSet["results"]["sunrise"]
             entry.data_.sunset_ = SunRiseSunSet["results"]["sunset"]
@@ -187,7 +287,7 @@ class databaseHelpers:
             for row in cur:
                 values = list(row)
 
-            # Fill out Databse Entry
+            # Fill out Database Entry
             entry.latitude_ = values[0]
             entry.longitude_ = values[1]
             entry.timeZone_ = values[2]
