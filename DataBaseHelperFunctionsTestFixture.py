@@ -7,7 +7,6 @@
 ######################################i
 
 import unittest
-import datetime
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 
