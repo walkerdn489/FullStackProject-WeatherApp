@@ -85,13 +85,12 @@ class TestDateTimeConversions(unittest.TestCase):
     def test_TimeConversions(self):
         date = "05/18/1998"
         time = self.helper.convertDateToTime(date)
-        print(time)
-        #self.assertEqual(time, 895474800.0, "Time should be 895474800.0 seconds")
-
+        delta  = 895474800 - 895449600
+        self.assertAlmostEqual(time, 895474800.0, delta,"Time should be around 895474800.0 seconds")
+        
         # May 18th 1998
         date = self.helper.convertTimeToDate(time)
         date = date.strftime('%m/%d/%Y')
-        print(date)
         month = date[0] + date[1]
         day = date[3] + date[4]
         year = date[6] + date[7] + date[8] + date[9]
