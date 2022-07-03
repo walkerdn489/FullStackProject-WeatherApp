@@ -3,3 +3,6 @@ Ownership of this project is under GUID-GAME, Brendon, David, Jack, Orlando, and
 Stack includes:
 Front end: Flask with HTML 
 Back end: Python with SQLite
+
+Ideas for the future: 
+swaping FLASK out with Django 
