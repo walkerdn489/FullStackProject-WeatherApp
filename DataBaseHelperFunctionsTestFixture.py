@@ -86,7 +86,7 @@ class TestDateTimeConversions(unittest.TestCase):
     def test_TimeConversions(self):
         date = "05/18/1998"
         time = self.helper.convertDateToTime(date)
-        self.assertEqual(time, 895464000.0, "Time should be 895464000.0 seconds")
+        self.assertEqual(time, 895474800.0, "Time should be 895464000.0 seconds")
 
         # May 18th 1998
         date = self.helper.convertTimeToDate(time)
@@ -133,14 +133,13 @@ class TestGetDBEntryFromLatLong(unittest.TestCase):
 
     def test_GetDBEntryFromLatLong(self):
         date = "06/26/2022"
-        time = self.helper.convertDateToTime(date)
         latLong = self.helper.getLatLongFromZip("01752")
 
         # First time should add it to DB 
-        results = self.helper.getEntryFromLonLat(latLong, time)
+        results = self.helper.getEntryFromLonLat(latLong, date)
 
         # Second time should pull it out of DB 
-        secondResults = self.helper.getEntryFromLonLat(latLong, time)
+        secondResults = self.helper.getEntryFromLonLat(latLong, date)
 
         self.assertEqual(results.latitude_, secondResults.latitude_, 42.3494)
         self.assertEqual(results.longitude_, secondResults.longitude_, -71.5468)
