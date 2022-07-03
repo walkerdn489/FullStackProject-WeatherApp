@@ -28,7 +28,6 @@ def login():
 
     zipCode = str(zipcode).strip()
     time = str(time).strip()
-    time = helper.convertDateToTime(time)
     result = helper.getLatLongFromZip(zipCode)
     LongLat = list(result)
     results = helper.getEntryFromLonLat(LongLat, time)
