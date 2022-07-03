@@ -89,7 +89,6 @@ class databaseHelpers:
         day = date[3] + date[4]
         year = date[6] + date[7] + date[8] + date[9]
         date = year + "-" + month + "-" + day
-        print(lat, long, date)
         apiString = "https://api.sunrise-sunset.org/json?lat={lat}&lng={long}&date={date}".format(
                     lat = lat, long = long, date = date)
         response = requests.get(apiString)
@@ -224,31 +223,29 @@ class databaseHelpers:
     ############################
     # Function: getEntryFromLonLat
     #
-    # Input: LatLong: list with [latitude, longitude], time: unix time 
+    # Input: LatLong: list with [latitude, longitude], date: a given date
     #
     # Output: Entry: entry from the database
     #
     # Notes: Will add the entry to the database if it is new
     ############################ 
-    def getEntryFromLonLat(self, LatLong, time):
+    def getEntryFromLonLat(self, LatLong, date):
         
+        time = self.convertDateToTime(date)
+
         # get entry for long and lat. Rounding to the 4th decimal place to match what was put in DataBase
         cur.execute("SELECT COUNT(*) FROM raw_weather_json WHERE lat=? and lon=? and dt=?", (round(LatLong[0],4), 
         round(LatLong[1],4), time))
         (number_of_rows,)=cur.fetchone()
 
         entry = databaseEntry()
-        stringDate = time
-        time = self.convertDateToTime(time)
 
         # not already in DB
         if (number_of_rows == 0):
 
             # Make Api Call
             apiResults = self.__callApi(LatLong[0], LatLong[1], time)
-            SunRiseSunSet = self.__callSunRiseSetApi(LatLong[0], LatLong[1], stringDate)
-            print(SunRiseSunSet)
-
+            SunRiseSunSet = self.__callSunRiseSetApi(LatLong[0], LatLong[1], date)
             data = apiResults["data"]
             weather = (data[0]["weather"])
 
@@ -265,9 +262,16 @@ class databaseHelpers:
             entry.data_.pressure_ = data[0]["pressure"]
             entry.data_.humidity_ = data[0]["humidity"]
             entry.data_.dewPoint_ = data[0]["dew_point"]
-            entry.data_.uvi_ = data[0]["uvi"]
+            # Sometimes these do not show up 
+            try:
+                entry.data_.uvi_ = data[0]["uvi"]
+                entry.data_.visibility_ = data[0]["visibility"]
+            except:
+                # no uvi was available 
+                entry.data_.uvi_ = 0
+                entry.data_.visibility_ = 0
+
             entry.data_.clouds_ = data[0]["clouds"]
-            entry.data_.visibility_ = data[0]["visibility"]
             entry.data_.windSpeed_ = data[0]["wind_speed"]
             entry.data_.windDeg_ = data[0]["wind_deg"]
             entry.weather_.id_ = weather[0]["id"]
