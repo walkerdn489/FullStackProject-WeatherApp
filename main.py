@@ -1,6 +1,6 @@
 ######################################
 # Main function for project 
-# Last Updated: 06/26/2022
+# Last Updated: 07/03/2022
 #
 #
 #
