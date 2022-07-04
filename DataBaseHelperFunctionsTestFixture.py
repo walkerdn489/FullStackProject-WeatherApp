@@ -86,8 +86,10 @@ class TestDateTimeConversions(unittest.TestCase):
         date = "05/18/1998"
         time = self.helper.convertDateToTime(date)
 
-        #This is based on time zone turning it off for now #TODO
-        #self.assertAlmostEqual(time, 895474800.0, delta,"Time should be around 895474800.0 seconds")
+        #This is based on time zone when running
+        offset = 0
+        time = time - offset
+        self.assertAlmostEqual(time, 895464000.0,"Time should be around 895464000.0 seconds")
         
         # May 18th 1998
         date = self.helper.convertTimeToDate(time)
