@@ -9,9 +9,12 @@
 
 
 from databaseEntry import databaseEntry
-import sqlite3
+from datetime import datetime, timezone
 import requests
-import datetime
+import sqlite3
+
+
+
 
 con = sqlite3.connect('SolarDatabase.db', check_same_thread=False)
 cur = con.cursor()
@@ -32,7 +35,9 @@ class databaseHelpers:
         month = int(date[0] + date[1]) 
         day = int(date[3] + date[4])
         year = int(date[6] + date[7] + date[8] + date[9])
-        dt = datetime.datetime(year, month, day)
+        dt = datetime(year, month, day)
+        # Make sure time is in UTC
+        dt = dt.replace(tzinfo=timezone.utc)
         
         # need to be an int to cut off any decimal places 
         time = int(dt.timestamp())
@@ -49,7 +54,8 @@ class databaseHelpers:
     ############################
     def convertTimeToDate(self, time):
         ts = int(time)
-        date = datetime.datetime.fromtimestamp(ts)
+        # make sure date is in utc
+        date = datetime.fromtimestamp(ts, timezone.utc)
         return date
 
     ############################

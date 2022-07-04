@@ -7,7 +7,6 @@
 ######################################i
 
 import unittest
-import datetime
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 
@@ -83,14 +82,18 @@ class TestGetLonLatFromZip(unittest.TestCase):
 class TestDateTimeConversions(unittest.TestCase):
     helper = databaseHelpers()
 
+
     def test_TimeConversions(self):
         date = "05/18/1998"
         time = self.helper.convertDateToTime(date)
-        self.assertEqual(time, 895474800.0, "Time should be 895464000.0 seconds")
-
+ 
+        #This is based on time zone when running
+        self.assertEqual(time, 895449600.0,"Time should be around 895449600.0 seconds")
+        
         # May 18th 1998
         date = self.helper.convertTimeToDate(time)
         date = date.strftime('%m/%d/%Y')
+
         month = date[0] + date[1]
         day = date[3] + date[4]
         year = date[6] + date[7] + date[8] + date[9]
