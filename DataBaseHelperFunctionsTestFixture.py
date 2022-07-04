@@ -1,16 +1,15 @@
 ######################################
 # Unit test for dataHelperFunctions
-# Last Updated: 06/27/2022
+# Last Updated: 07/03/2022
 #
 #
 #
 ######################################i
 
-import unittest
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
-
 import sqlite3
+import unittest
 
 con = sqlite3.connect('SolarDatabase.db')
 cur = con.cursor()

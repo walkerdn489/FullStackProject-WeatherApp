@@ -1,6 +1,6 @@
 ######################################
 # Main function for project 
-# Last Updated: 06/26/2022
+# Last Updated: 07/03/2022
 #
 #
 #
@@ -8,7 +8,6 @@
 
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
-
 from flask import Flask, request, render_template  
 
 helper = databaseHelpers()

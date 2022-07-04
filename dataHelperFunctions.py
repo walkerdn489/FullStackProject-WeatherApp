@@ -1,20 +1,16 @@
 ######################################
 # Helper methods for the data-base 
 # used for the project 
-# Last Updated: 06/27/2022
+# Last Updated: 07/03/2022
 #
 #
 #
 ######################################
 
-
 from databaseEntry import databaseEntry
 from datetime import datetime, timezone
 import requests
 import sqlite3
-
-
-
 
 con = sqlite3.connect('SolarDatabase.db', check_same_thread=False)
 cur = con.cursor()
