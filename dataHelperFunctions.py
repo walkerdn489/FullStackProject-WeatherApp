@@ -60,7 +60,7 @@ class databaseHelpers:
     # Notes:  
     # This is a Private method (__FUNCTION_NAME)
     ############################
-    def __callApi(self, lat, long, time):
+    def callApi(self, lat, long, time):
         apiString = "http://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={long}&units={units}&dt={dt}&appid={API_key}".format(
                     lat = lat, long = long, units = "imperial", dt = time, API_key = "3c2a147d1d1f2209c45eb58546d9d49f")
         response = requests.get(apiString)
@@ -81,7 +81,7 @@ class databaseHelpers:
     # This is a Private method (__FUNCTION_NAME)
     # This comes out in UTC
     ############################
-    def __callSunRiseSetApi(self, lat, long, date): 
+    def callSunRiseSetApi(self, lat, long, date): 
         # Change Date to YYYY-MM-DD
         month = date[0] + date[1]
         day = date[3] + date[4]

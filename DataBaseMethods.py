@@ -162,8 +162,8 @@ class dataBaseMethods:
         if (number_of_rows == 0):
 
             # Make Api Call
-            apiResults = self.helper.__callApi(LatLong[0], LatLong[1], time)
-            SunRiseSunSet = self.helper.__callSunRiseSetApi(LatLong[0], LatLong[1], date)
+            apiResults = self.helper.callApi(LatLong[0], LatLong[1], time)
+            SunRiseSunSet = self.helper.callSunRiseSetApi(LatLong[0], LatLong[1], date)
             data = apiResults["data"]
             weather = (data[0]["weather"])
 
