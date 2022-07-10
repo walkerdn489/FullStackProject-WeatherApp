@@ -4,18 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Weather Forcast</title>
+<title>Weather Forecast</title>
 
 </head>
 <body>
   {% extends "template.html" %}
   {% block content %}
     
-  <h1> Weather Forcast: </h1>
-  <p>The temperature: {{ variable.data_.temp_ }}F</p>
-  <p>Feels Like: {{ variable.data_.feelsLike_ }}F</p>
-  <p>Humidity: {{ variable.data_.humidity_ }}%</p>
-  <p>With a Wind Speed of: {{ variable.data_.windSpeed_ }} miles/hour</p>
+  <h1> Weather Forecast: </h1>
+  <p>The temperature: {{ variable2.data_.temp_ }}F</p>
+  <p>Feels Like: {{ variable2.data_.feelsLike_ }}F</p>
+  <p>Humidity: {{ variable2.data_.humidity_ }}%</p>
+  <p>With a Wind Speed of: {{ variable2.data_.windSpeed_ }} miles/hour</p>
+  <p>total amount of sunlight this past week: {{variable[0], variable[1], variable[2]}} (hours, minutes, seconds)</p> 
 
   {% endblock %}
 </body>

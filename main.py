@@ -43,7 +43,7 @@ def login():
         results.append(result)
     
     totalSunLight = sunLightAlgorithm.getTotalSunlightForWeek(results)
-    return render_template('results.html', variable=results[0]) ##TODO this will change
+    return render_template('results.html', variable=totalSunLight, variable2 = results[0])
 
 @app.route('/about')
 def about():

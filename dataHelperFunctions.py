@@ -8,7 +8,6 @@
 ######################################
 
 from datetime import datetime, timezone
-import DataBaseMethods
 import requests
 
 class databaseHelpers:
