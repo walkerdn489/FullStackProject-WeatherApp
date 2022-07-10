@@ -7,6 +7,7 @@
 ######################################i
 
 from DataBaseMethods import dataBaseMethods
+from SunLightAlgorithm import SunLightAlgorithm
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
 import sqlite3
@@ -150,6 +151,12 @@ class TestGetDBEntryFromLatLong(unittest.TestCase):
         self.assertEqual(results.data_.dateTime_, secondResults.data_.dateTime_, 1656216000)
         self.assertEqual(results.data_.temp_, secondResults.data_.temp_,66.2)
 
+class TestSunLightAlgorithm(unittest.TestCase):
+    sunLightAlgorithm = SunLightAlgorithm()
+    helper = databaseHelpers()
+
+    def test_getTotalSunlightForWeek(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

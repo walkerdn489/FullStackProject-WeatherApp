@@ -6,8 +6,6 @@
 #
 ######################################
 
-from datetime import datetime
-
 class SunLightAlgorithm:
 
     def getTotalSunlightForWeek(self, dates):
