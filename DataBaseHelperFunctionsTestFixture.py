@@ -1,22 +1,23 @@
 ######################################
 # Unit test for dataHelperFunctions
-# Last Updated: 06/27/2022
+# Last Updated: 07/03/2022
 #
 #
 #
 ######################################i
 
-import unittest
+from DataBaseMethods import dataBaseMethods
+from SunLightAlgorithm import SunLightAlgorithm
 from databaseEntry import databaseEntry
 from dataHelperFunctions import databaseHelpers
-
 import sqlite3
+import unittest
 
 con = sqlite3.connect('SolarDatabase.db')
 cur = con.cursor()
 
 class TestAddAndDeleteToDataBase(unittest.TestCase):
-    helper = databaseHelpers()
+    dbMethods = dataBaseMethods()
     entry = databaseEntry()
     entry.longitude_ = 1
     entry.latitude_ = 1
@@ -27,7 +28,7 @@ class TestAddAndDeleteToDataBase(unittest.TestCase):
     entry.weather_.id_ = 1
     
     def test_addToDataBase(self):
-        self.helper.add(self.entry)
+        self.dbMethods.add(self.entry)
 
         # get the element
         cur.execute("SELECT * FROM raw_weather_json WHERE dt=?", (self.entry.data_.dateTime_,))
@@ -59,7 +60,7 @@ class TestAddAndDeleteToDataBase(unittest.TestCase):
         self.assertEqual(values[20], "", "icon is empty")
 
     def test_deleteFromDataBase(self):
-        self.helper.delete(self.entry)
+        self.dbMethods.delete(self.entry)
 
         # get the element
         cur.execute("SELECT * FROM raw_weather_json WHERE dt=?", (self.entry.data_.dateTime_,))
@@ -71,11 +72,11 @@ class TestAddAndDeleteToDataBase(unittest.TestCase):
         self.assertEqual(len(values), 0, "should not find entry since it is deleted")
     
 class TestGetLonLatFromZip(unittest.TestCase):
-    helper = databaseHelpers()
+    dbMethods = dataBaseMethods()
 
     def test_getLonLat(self):
         zipCode = 29910
-        result = self.helper.getLatLongFromZip(zipCode)
+        result = self.dbMethods.getLatLongFromZip(zipCode)
         self.assertEqual(result[0], 32.2204, "Latitude should be 32.2204")
         self.assertEqual(result[1], -80.88277, "Longitude should be -80.88277")
 
@@ -103,7 +104,7 @@ class TestDateTimeConversions(unittest.TestCase):
 
 
 class TestUpdateToDataBase(unittest.TestCase):
-    helper = databaseHelpers()
+    dbMethods = dataBaseMethods()
     entry = databaseEntry()
     entry.longitude_ = 1
     entry.latitude_ = 1
@@ -115,10 +116,10 @@ class TestUpdateToDataBase(unittest.TestCase):
 
     def test_updateToDataBase(self):
 
-        self.helper.add(self.entry)
+        self.dbMethods.add(self.entry)
 
         self.entry.longitude_ = 2
-        self.helper.update(self.entry)
+        self.dbMethods.update(self.entry)
 
         # get the element
         cur.execute("SELECT * FROM raw_weather_json WHERE dt=?", (self.entry.data_.dateTime_,))
@@ -128,21 +129,21 @@ class TestUpdateToDataBase(unittest.TestCase):
             values = list(row)
         self.assertEqual(values[1], 2, "longitude should now be 2")
 
-        self.helper.delete(self.entry)        
+        self.dbMethods.delete(self.entry)        
 
 class TestGetDBEntryFromLatLong(unittest.TestCase):
-    helper = databaseHelpers()
     entry = databaseEntry()
+    dbMethods = dataBaseMethods()
 
     def test_GetDBEntryFromLatLong(self):
         date = "06/26/2022"
-        latLong = self.helper.getLatLongFromZip("01752")
+        latLong = self.dbMethods.getLatLongFromZip("01752")
 
         # First time should add it to DB 
-        results = self.helper.getEntryFromLonLat(latLong, date)
+        results = self.dbMethods.getEntryFromLonLat(latLong, date)
 
         # Second time should pull it out of DB 
-        secondResults = self.helper.getEntryFromLonLat(latLong, date)
+        secondResults = self.dbMethods.getEntryFromLonLat(latLong, date)
 
         self.assertEqual(results.latitude_, secondResults.latitude_, 42.3494)
         self.assertEqual(results.longitude_, secondResults.longitude_, -71.5468)
@@ -150,6 +151,12 @@ class TestGetDBEntryFromLatLong(unittest.TestCase):
         self.assertEqual(results.data_.dateTime_, secondResults.data_.dateTime_, 1656216000)
         self.assertEqual(results.data_.temp_, secondResults.data_.temp_,66.2)
 
+class TestSunLightAlgorithm(unittest.TestCase):
+    sunLightAlgorithm = SunLightAlgorithm()
+    helper = databaseHelpers()
+
+    def test_getTotalSunlightForWeek(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

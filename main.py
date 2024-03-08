@@ -6,12 +6,14 @@
 #
 ######################################
 
-from databaseEntry import databaseEntry
+from DataBaseMethods import dataBaseMethods
 from dataHelperFunctions import databaseHelpers
-
 from flask import Flask, request, render_template  
+from SunLightAlgorithm import SunLightAlgorithm
 
 helper = databaseHelpers()
+dbMethods = dataBaseMethods()
+sunLightAlgorithm = SunLightAlgorithm()
 
 app = Flask(__name__)
 
@@ -24,22 +26,31 @@ def login():
     if request.method == 'POST':
         zipcode = request.form['zipcode']
         electricity_bill = request.form['electricity_bill']
-        time = request.form['date']
-
+        date = request.form['date']
+    # strip zip code in date to have no extra spaces
     zipCode = str(zipcode).strip()
-    time = str(time).strip()
-    result = helper.getLatLongFromZip(zipCode)
+    date = str(date).strip()
+    
+    # get the latitude and longitude 
+    result = dbMethods.getLatLongFromZip(zipCode)
     LongLat = list(result)
-    results = helper.getEntryFromLonLat(LongLat, time)
 
-    return render_template('results.html', variable=results)
+    # get a the past week from the day that was given
+    weekOfDates = helper.getDaysOfCurrentWeek(date)
+    results = []
+    for day in weekOfDates:
+        result = dbMethods.getEntryFromLonLat(LongLat, day)
+        results.append(result)
+    
+    totalSunLight = sunLightAlgorithm.getTotalSunlightForWeek(results)
+    return render_template('results.html', variable=totalSunLight, variable2 = results[0])
 
 @app.route('/about')
 def about():
     return render_template("about.html")
 
 def main():
-    helper.closeDataBase()
+    dbMethods.closeDataBase()
 
 if __name__ == "__main__":
     app.run(debug=True)
